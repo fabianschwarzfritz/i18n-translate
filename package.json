@@ -1,0 +1,15 @@
+{
+  "name": "i18n-file-translator",
+  "version": "0.0.1",
+  "description": "Automatically translate i18n files with google translate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "google-translate-api": "^2.3.0"
+  }
+}
