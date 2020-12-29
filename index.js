@@ -1,7 +1,7 @@
 /**
  * Imports
  */
-const translate = require('google-translate-api');
+const translate = require('translatte');
 const fs  = require('fs');
 const fsPromises = fs.promises;
 
@@ -83,13 +83,13 @@ class NTranslator {
 
   async translate() {
     const result = [];
-    this.i18n.forEach(async (entry) => {
+    for(const entry of this.i18n) {
       const text = entry.value;
       let translated = text;
       try {
         const translation = await translate(text, { to: this.language });
-        console.log('translation', translation);
         translated = translation.text
+        console.log(translated);
       } catch(err) {
         console.log(`Translation error for word '${text}'. Ignoring error.`);
         console.log(err);
@@ -98,7 +98,33 @@ class NTranslator {
         key: entry.key,
         value: translated
       });
-    });
+    };
+    return result;
+  }
+}
+
+/**
+ * NWriter writes the translated files to an i18n file
+ */
+class NWriter {
+  constructor(translation, file) {
+    this.translation = translation;
+    this.file = file;
+  }
+
+  async writeFile() {
+    let text = "";
+    for(const entry of this.translation) {
+      text = text + entry.key + "=" + entry.value + "\n";
+    }
+
+    console.log(text);
+    const file = process.cwd() + '/' + this.file
+    try{
+      fs.writeFileSync(file, text);
+    } catch(err) {
+      console.log(`Error writing file ${this.file}`);
+    }
   }
 }
 
@@ -108,16 +134,16 @@ class NTranslator {
 const main = async() => {
   const reader = new NReader(infile);
   const content = await reader.read();
-  console.log(content);
-
   const parser = new NParser(content);
   const lines = await parser.getLines();
-  console.log(lines);
 
   const translator = new NTranslator(lines, 'de');
   const translated = await translator.translate();
   console.log(translated);
+  console.log(translated);
+
+  const writer = new NWriter(translated, 'i18n-de.properties');
+  await writer.writeFile();
 }
 
 main();
-
