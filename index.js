@@ -4,39 +4,8 @@
 const Options = require('./src/Options');
 const Translator = require('./src/Translator');
 const Reader = require('./src/Reader');
+const Parser = require('./src/Parser');
 const fs  = require('fs');
-
-/**
- * NParser parses a given i18n file
- */
-class NParser {
-  constructor(content) {
-    this.content = content;
-  }
-
-  async getLines() {
-    const result = [];
-    try {
-      const lines = this.content.split('\n');
-      lines.forEach((line) => {
-        const s = line.split('=');
-        const key = s[0];
-        const value = s[1];
-        if(key === '') {
-          return
-        }
-        result.push({
-          key,
-          value
-        });
-      });
-    } catch(err) { 
-      console.log('Could not split file!');
-      throw err;
-    }
-    return result;
-  }
-}
 
 /**
  * NWriter writes the translated files to an i18n file
@@ -70,7 +39,7 @@ const main = async() => {
   const options = new Options().getOptions();
   const reader = new Reader(options.file);
   const content = await reader.read();
-  const parser = new NParser(content);
+  const parser = new Parser(content);
   const lines = await parser.getLines();
 
   const translator = new Translator(lines, options.language);
