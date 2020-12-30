@@ -1,33 +1,10 @@
 /**
  * Imports
  */
+const Options = require('./src/Options');
 const translate = require('translatte');
 const fs  = require('fs');
 const fsPromises = fs.promises;
-
-/**
- * The paramters of the program
- */
-class Options {
-  constructor() {
-    this.args = process.argv;
-  }
-
-  getOptions() {
-    if(this.args.length !== 4) {
-      console.log('Wrong program paramters!');
-      console.log('Sample usage:')
-      console.log('  translate <file> <language-initials>')
-      console.log('  translate i18n.properties de')
-      process.exit(0);
-    }
-
-    return {
-      file: this.args[2],
-      language: this.args[3],
-    }
-  }
-}
 
 /**
  * NReader reads the content of the specified file.
