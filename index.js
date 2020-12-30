@@ -3,27 +3,8 @@
  */
 const Options = require('./src/Options');
 const Translator = require('./src/Translator');
+const Reader = require('./src/Reader');
 const fs  = require('fs');
-const fsPromises = fs.promises;
-
-/**
- * NReader reads the content of the specified file.
- */
-class NReader {
-  constructor(file) {
-    this.file = file;
-  }
-
-  async read() {
-    try {
-      const file = process.cwd() + '/' + this.file
-      return await fsPromises.readFile(file, 'utf8');
-    } catch(err) {
-      console.log('Could not read file!');
-      throw err;
-    }
-  }
-}
 
 /**
  * NParser parses a given i18n file
@@ -87,7 +68,7 @@ class NWriter {
  */
 const main = async() => {
   const options = new Options().getOptions();
-  const reader = new NReader(options.file);
+  const reader = new Reader(options.file);
   const content = await reader.read();
   const parser = new NParser(content);
   const lines = await parser.getLines();
