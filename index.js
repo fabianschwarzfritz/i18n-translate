@@ -6,18 +6,28 @@ const fs  = require('fs');
 const fsPromises = fs.promises;
 
 /**
- * Program imports
+ * The paramters of the program
  */
-const args = process.argv.slice(2);
+class Options {
+  constructor() {
+    this.args = process.argv;
+  }
 
-if(args.length !== 2) {
-  console.log('Wrong program paramters!');
-  process.exit(1);
+  getOptions() {
+    if(this.args.length !== 4) {
+      console.log('Wrong program paramters!');
+      console.log('Sample usage:')
+      console.log('  translate <file> <language-initials>')
+      console.log('  translate i18n.properties de')
+      process.exit(0);
+    }
+
+    return {
+      file: this.args[2],
+      language: this.args[3],
+    }
+  }
 }
-
-
-const infile = args[0];
-const inlanguage = args[1];
 
 /**
  * NReader reads the content of the specified file.
@@ -130,12 +140,13 @@ class NWriter {
  * Main program function
  */
 const main = async() => {
-  const reader = new NReader(infile);
+  const options = new Options().getOptions();
+  const reader = new NReader(options.file);
   const content = await reader.read();
   const parser = new NParser(content);
   const lines = await parser.getLines();
 
-  const translator = new NTranslator(lines, inlanguage);
+  const translator = new NTranslator(lines, options.language);
   const translated = await translator.translate();
 
   const writer = new NWriter(translated, 'i18n-out.properties');
