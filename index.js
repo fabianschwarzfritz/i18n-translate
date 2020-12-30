@@ -2,9 +2,9 @@
  * Imports
  */
 const Options = require('./src/Options');
-const Translator = require('./src/Translator');
-const Reader = require('./src/Reader');
 const Parser = require('./src/Parser');
+const Reader = require('./src/Reader');
+const Translator = require('./src/Translator');
 const Writer = require('./src/Writer');
 
 /**
@@ -12,6 +12,7 @@ const Writer = require('./src/Writer');
  */
 const main = async() => {
   const options = new Options().getOptions();
+
   const reader = new Reader(options.file);
   const content = await reader.read();
   const parser = new Parser(content);
