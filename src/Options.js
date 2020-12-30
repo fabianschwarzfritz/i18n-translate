@@ -22,4 +22,4 @@ class Options {
   }
 }
 
-module.exports = Options
+module.exports = Options;
