@@ -9,10 +9,9 @@ const fsPromises = fs.promises;
  * Program imports
  */
 const args = process.argv.slice(2);
-console.log('args: ', args);
 
 if(args.length !== 2) {
-  console.log('Wrong program paramter!');
+  console.log('Wrong program paramters!');
   process.exit(1);
 }
 
@@ -89,7 +88,6 @@ class NTranslator {
       try {
         const translation = await translate(text, { to: this.language });
         translated = translation.text
-        console.log(translated);
       } catch(err) {
         console.log(`Translation error for word '${text}'. Ignoring error.`);
         console.log(err);
@@ -119,7 +117,7 @@ class NWriter {
     }
 
     console.log(text);
-    const file = process.cwd() + '/' + this.file
+    const file = process.cwd() + '/out/' + this.file
     try{
       fs.writeFileSync(file, text);
     } catch(err) {
@@ -137,12 +135,10 @@ const main = async() => {
   const parser = new NParser(content);
   const lines = await parser.getLines();
 
-  const translator = new NTranslator(lines, 'de');
+  const translator = new NTranslator(lines, inlanguage);
   const translated = await translator.translate();
-  console.log(translated);
-  console.log(translated);
 
-  const writer = new NWriter(translated, 'i18n-de.properties');
+  const writer = new NWriter(translated, 'i18n-out.properties');
   await writer.writeFile();
 }
 
