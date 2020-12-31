@@ -4,7 +4,7 @@
   "description": "Automatically translate i18n files with google translate",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./test.sh",
     "start": "node index.js"
   },
   "author": "",
