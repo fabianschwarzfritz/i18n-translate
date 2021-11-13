@@ -3,17 +3,20 @@
 echo "Installing package"
 npm install
 
-echo "Runnig Programm from sample file"
+echo "Preparing test directory"
+mkdir -p out
+
+echo "Running programm from sample file"
 npm start i18n.properties de
 
 echo "Test output"
 
 read -r -d '' EXPECTED << EOM
-buttonOk=In Ordnung
-buttonCancel=Stornieren
+buttonOk=Okay
+buttonCancel=Abbrechen
 buttonHeading=Warnung
 buttonDisplayPreferences=Präferenzen anzeigen.
-buttonDisplayPreferences=Geplanter Termin
+buttonDisplayPreferences=Termin
 buttonFormatText=Format Text
 buttonGrammar=Rechtschreibung & Grammatik.
 buttonReceipts=Quittungen anfordern.
@@ -24,6 +27,8 @@ EOM
 
 if [[ $(< out/i18n-out.properties) != "$EXPECTED" ]]; then
   echo "ASSERTION ERROR! Generated output is not equal to expected!"
+  echo "Here's the diff:"
+  diff out/i18n-out.properties <(echo "$EXPECTED")
   exit 1
 else
   echo "TEST SUCCESSFUL!"
